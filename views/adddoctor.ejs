@@ -1,0 +1,37 @@
+
+<h1> Add Doctor</h1>
+
+
+<form action="" method="post">
+    <div class="input-data">
+
+
+        <div>
+            <label class="label-data-name" style="font-size: 20px;"> First Name </label> <br>
+            <input class="input-data-name" style="font-size: 15px; width: 220px;" type="text" name="firstName"> <br>
+
+            <label class="label-data-name" style="font-size: 20px;"> Education </label> <br>
+            <select name="education">
+                <option value="S1">Dokter Umum</option>
+                <option value="S2">Spesialis</option>
+                
+            </select>
+            <br>
+        
+
+        <label class="label-data-type" style="font-size: 20px;"> Date of birth </label> <br>
+        <input type="date" name="dateOfBirth"> <br>
+
+        <label class="label-data-location" style="font-size: 20px;"> Salary: </label> <br>
+        <input class="input-data-location" style="font-size: 15px; width: 220px;" type="number"  inputmode="numeric"  pattern="[0-9\s]{13,19}"  name="salary"> <br>
+
+        <div class="submit-button-container">
+            <button style="height: 50px; width: 100px; font-size: 20px; font-family: Arial, Helvetica, sans-serif;"
+                type="submit"> Add Doctor </button>
+        </div>
+
+    </div>
+</form>
+</body>
+
+</html>
