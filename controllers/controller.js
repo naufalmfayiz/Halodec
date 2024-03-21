@@ -63,6 +63,19 @@ class Controller {
     }
   }
 
+  //<<<<<< LOGOUT
+  static async getLogOut(req, res) {
+    try {
+      req.session.destroy(err => {
+        if (err) { console.log(err) }
+        else { res.redirect(`/login`) }
+      })
+    } catch (error) {
+      es.send(error)
+    }
+  }
+
+  //<<<<<< MENU
   static async showCheckUp(req, res) {
     try {
       let { err } = req.query

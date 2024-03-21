@@ -10,6 +10,10 @@ router.post('/register', Controller.postRegisterForm)
 router.get('/login', Controller.showLogin)
 router.post('/login', Controller.postLogin)
 
+//<<<<<< LOGOUT
+router.get('/logout', Controller.getLogOut)
+
+//<<<<<< SESSION
 const isLoggedIn = function (req, res, next) {
   // console.log(req.session)
   if (!req.session.userId) {
@@ -19,7 +23,6 @@ const isLoggedIn = function (req, res, next) {
     next()
   }
 }
-
 const isAdmin = function (req, res, next) {
   // console.log(req.session)
   if (req.session.role !== 'admin') {
@@ -30,6 +33,7 @@ const isAdmin = function (req, res, next) {
   }
 }
 
+//<<<<<< MENU
 router.use(isLoggedIn)
 
 router.get('/', (req, res) => {
