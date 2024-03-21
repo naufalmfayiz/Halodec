@@ -1,6 +1,7 @@
 
 const { PatientDetail, Doctor, User, CheckUp, CheckUpDoctor } = require('../models')
 const bcrypt = require('bcryptjs');
+const { Op } = require('sequelize');
 
 class Controller {
 
@@ -92,14 +93,20 @@ class Controller {
   static async showPatientDetail(req, res) {
     try {
       let { userId } = req.session
-      const data = await User.findByPk(userId, {
-        include: PatientDetail
+      // console.log(userId)
+      let data = await User.findByPk(userId, {
+        include: {
+          model: PatientDetail
+        }
       })
-      let localDate = PatientDetail.localDate(data.PatientDetail.dateOfBirth)
-      // res.send(data)
-      res.render('patient-detail', { data, localDate, userId })
+      let local;
+      if (data.PatientDetail) {
+        local = PatientDetail.localDate(data.PatientDetail.dateOfBirth)
+      }
+      res.render('patient-detail', { data, local, userId })
+
     } catch (error) {
-      res.send(error)
+      console.log(error)
     }
   }
 
@@ -126,13 +133,23 @@ class Controller {
   }
 
 
-
   static async showDoctor(req, res) {
     try {
-      let { userId, role } = req.session
-      const data = await Doctor.findAll()
+      let { userId, role } = req.session;
+      let { notif } = req.query
+      let options = {};
+      console.log(req.query)
+      if (req.query.search) {
+        options.name = {
+          [Op.iLike]: `%${req.query.search}%`
+        };
+      }
+      const data = await Doctor.findAll({
+        where: options,
+        order: [['name', 'ASC']]
+      })
       // res.send(data)
-      res.render('doctor', { data, role, userId })
+      res.render('doctor', { data, role, userId, notif })
     } catch (error) {
       res.send(error)
     }
@@ -207,10 +224,11 @@ class Controller {
   static async deleteDoctor(req, res) {
     try {
       let { id } = req.params
+      let data = await Doctor.findByPk(id)
       await Doctor.destroy({
         where: { id }
       })
-      res.redirect('/doctor')
+      res.redirect(`/doctor?notif=${data.name} was removed`)
     } catch (error) {
       res.send(error)
     }
