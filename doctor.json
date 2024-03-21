@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Tatang Suparman",
+    "specialist": "Dokter Umum",
+    "cost": 20000
+  },
+  {
+    "name": "Joko Bodo",
+    "specialist": "Dokter Gigi",
+    "cost": 30000
+  },
+  {
+    "name": "Maman Racing",
+    "specialist": "Dokter Anak",
+    "cost": 40000
+  }
+]

@@ -1,0 +1,21 @@
+- Model
+  Users
+  npx sequelize model:create --name User --attributes email:string,password:string,role:string
+
+  PatientDetail
+  npx sequelize model:create --name PatientDetail --attributes name:string,gender:string,dateOfBirth:date,UserId:integer
+
+  Doctors
+  npx sequelize model:create --name Doctor --attributes name:string,specialist:string
+
+  Checkups
+  npx sequelize model:create --name Checkup --attributes UserId:integer,appointment:date
+
+  CheckupDoctors
+  npx sequelize model:create --name CheckupDoctor --attributes DoctorId:integer,CheckUpId:integer
+
+- addColumn 
+  npx sequelize  migration:create --name costColumn-doctor
+
+- Seed file
+  npx sequelize seed:create --name seedDoctor
