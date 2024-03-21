@@ -16,6 +16,9 @@
 
     <div class="container">
       <div style="text-align: center">
+        <% if (err) { %>
+        <h2 style="color: red"><%= err %></h2>
+        <% } %>
         <h2>Checkup List</h2>
       </div>
     </div>

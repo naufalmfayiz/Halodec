@@ -1,15 +1,76 @@
 
 const { PatientDetail, Doctor, User, CheckUp, CheckUpDoctor } = require('../models')
+const bcrypt = require('bcryptjs');
 
 class Controller {
 
+  //<<<<<< REGISTER
+  static async registerForm(req, res) {
+    try {
+      res.render('register')
+    } catch (error) {
+      res.send(error)
+    }
+  }
+
+  static async postRegisterForm(req, res) {
+    try {
+      let { email, password, role } = req.body
+      await User.create({ email, password, role })
+      res.redirect('/login')
+      // console.log(req.body)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  //<<<<<< LOGIN
+  static async showLogin(req, res) {
+    try {
+      let { err } = req.query
+      res.render('login', { err })
+    } catch (error) {
+      res.send(error)
+    }
+  }
+
+  static async postLogin(req, res) {
+    try {
+      let { email, password } = req.body;
+      // console.log(req.body)
+      let data = await User.findOne({ where: { email } })
+      if (!data) {
+        const error = `Invalid email/password`
+        return res.redirect(`/login?err=${error}`)
+      }
+      if (email) {
+        const isValidPass = bcrypt.compareSync(password, data.password);
+        if (isValidPass) {
+
+          req.session.userId = data.id;
+          req.session.role = data.role;
+
+          return res.redirect('/checkup')
+        } else {
+          const error = `Invalid email/password`
+          return res.redirect(`/login?err=${error}`)
+        }
+      }
+
+    } catch (error) {
+      res.send(error)
+    }
+  }
+
   static async showCheckUp(req, res) {
     try {
+      let { err } = req.query
       // let data = await CheckUp.findAll({
       //   include: CheckUpDoctor
       // })
 
-      res.render('checkup')
+      res.render('checkup', { err })
     } catch (error) {
       res.send(error)
     }
@@ -26,9 +87,10 @@ class Controller {
 
   static async showDoctor(req, res) {
     try {
+      let { role } = req.session
       const data = await Doctor.findAll()
       // res.send(data)
-      res.render('doctor', { data })
+      res.render('doctor', { data, role })
     } catch (error) {
       res.send(error)
     }
