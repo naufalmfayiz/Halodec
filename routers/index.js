@@ -41,6 +41,10 @@ router.get('/', (req, res) => {
 })
 router.get('/checkup', Controller.showCheckUp)
 
+router.get('/checkup/:userId/add', Controller.showAddCheckup)
+router.post('/checkup/:userId/add', Controller.postAddCheckup)
+
+
 router.get('/doctor', Controller.showDoctor)
 
 router.get('/doctor/add', isAdmin, Controller.showAddDoctor)

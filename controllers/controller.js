@@ -1,5 +1,5 @@
 
-const { PatientDetail, Doctor, User, CheckUp, CheckUpDoctor } = require('../models')
+const { PatientDetail, Doctor, User, Checkup, CheckUpDoctor } = require('../models')
 const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
 
@@ -234,6 +234,28 @@ class Controller {
     }
   }
 
+  static async showAddCheckup(req, res) {
+    try {
+      let { userId } = req.params
+      res.render('add-checkup', { userId })
+    } catch (error) {
+      res.send(error)
+    }
+  }
+
+  static async postAddCheckup(req, res) {
+    try {
+      let { userId } = req.session
+      let { appointment, doctorId } = req.body
+      console.log(req.body)
+
+      await Checkup.create({ UserId: userId, appointment })
+
+      res.redirect('/')
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
 
 module.exports = Controller
