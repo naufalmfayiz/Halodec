@@ -13,7 +13,7 @@ router.post('/login', Controller.postLogin)
 //<<<<<< LOGOUT
 router.get('/logout', Controller.getLogOut)
 
-//<<<<<< SESSION
+//<<<<<< SESSION FUNCTION
 const isLoggedIn = function (req, res, next) {
   // console.log(req.session)
   if (!req.session.userId) {
@@ -41,7 +41,6 @@ router.get('/', (req, res) => {
 })
 router.get('/checkup', Controller.showCheckUp)
 
-
 router.get('/doctor', Controller.showDoctor)
 
 router.get('/doctor/add', isAdmin, Controller.showAddDoctor)
@@ -53,7 +52,9 @@ router.post('/doctor/:id/edit', Controller.postEditDoctor)
 router.get('/doctor/:id/delete', isAdmin, Controller.deleteDoctor)
 
 
-router.get('/patient',)
+router.get('/patient/:userId', Controller.showPatientDetail)
 
+router.get('/patient/:userId/add', Controller.showAddPatient)
+router.post('/patient/:userId/add', Controller.postAddPatient)
 
 module.exports = router

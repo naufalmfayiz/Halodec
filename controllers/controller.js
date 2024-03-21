@@ -75,15 +75,15 @@ class Controller {
     }
   }
 
-  //<<<<<< MENU
+  //<<<<<< MENU >>>>>>>
   static async showCheckUp(req, res) {
     try {
+      let { userId } = req.session
       let { err } = req.query
       // let data = await CheckUp.findAll({
       //   include: CheckUpDoctor
       // })
-
-      res.render('checkup', { err })
+      res.render('checkup', { err, userId })
     } catch (error) {
       res.send(error)
     }
@@ -91,19 +91,48 @@ class Controller {
 
   static async showPatientDetail(req, res) {
     try {
-      const data = await PatientDetail.findAll()
-
+      let { userId } = req.session
+      const data = await User.findByPk(userId, {
+        include: PatientDetail
+      })
+      let localDate = PatientDetail.localDate(data.PatientDetail.dateOfBirth)
+      // res.send(data)
+      res.render('patient-detail', { data, localDate, userId })
     } catch (error) {
       res.send(error)
     }
   }
 
+  static async showAddPatient(req, res) {
+    try {
+      let { userId } = req.session
+      let { error, path } = req.query
+      res.render('add-patient', { userId, error, path })
+    } catch (error) {
+      res.send(error)
+    }
+  }
+
+  static async postAddPatient(req, res) {
+    try {
+      let { userId } = req.session
+      let { name, gender, dateOfBirth } = req.body
+      // console.log(req.body)
+      await PatientDetail.create({ name, gender, dateOfBirth, UserId: userId })
+      res.redirect(`/patient/${userId}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+
   static async showDoctor(req, res) {
     try {
-      let { role } = req.session
+      let { userId, role } = req.session
       const data = await Doctor.findAll()
       // res.send(data)
-      res.render('doctor', { data, role })
+      res.render('doctor', { data, role, userId })
     } catch (error) {
       res.send(error)
     }
@@ -111,8 +140,9 @@ class Controller {
 
   static async showAddDoctor(req, res) {
     try {
+      let { userId } = req.session
       let { error, path } = req.query
-      res.render('add-doctor', { error, path })
+      res.render('add-doctor', { error, path, userId })
     } catch (error) {
       res.send(error)
     }
@@ -141,11 +171,12 @@ class Controller {
 
   static async showEditDoctor(req, res) {
     try {
+      let { userId } = req.session
       let { id } = req.params
       let { error, path } = req.query
       let data = await Doctor.findByPk(id)
       // res.send(data)
-      res.render('edit-doctor', { data, error, path })
+      res.render('edit-doctor', { data, userId, error, path })
     } catch (error) {
       res.send(error)
     }
