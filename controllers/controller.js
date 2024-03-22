@@ -87,7 +87,7 @@ class Controller {
       })
 
       // console.log(data, "<- dtat")
-      res.send(data)
+      // res.send(data)
       res.render('checkup', { err, data, userId })
     } catch (error) {
       // console.log(error, "<- error");
