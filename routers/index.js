@@ -41,10 +41,6 @@ router.get('/', (req, res) => {
 })
 router.get('/checkup', Controller.showCheckUp)
 
-router.get('/checkup/:userId/add', Controller.showAddCheckup)
-router.post('/checkup/:userId/add', Controller.postAddCheckup)
-
-
 router.get('/doctor', Controller.showDoctor)
 
 router.get('/doctor/add', isAdmin, Controller.showAddDoctor)
@@ -54,6 +50,8 @@ router.get('/doctor/:id/edit', isAdmin, Controller.showEditDoctor)
 router.post('/doctor/:id/edit', Controller.postEditDoctor)
 
 router.get('/doctor/:id/delete', isAdmin, Controller.deleteDoctor)
+router.post("/doctor/:id/checkup", Controller.addCheckup)
+router.get("/doctor/:id/appointment", Controller.showCreateAppointmentPage)
 
 
 router.get('/patient/:userId', Controller.showPatientDetail)

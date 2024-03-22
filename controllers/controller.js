@@ -1,5 +1,5 @@
 
-const { PatientDetail, Doctor, User, Checkup, CheckUpDoctor } = require('../models')
+const { PatientDetail, Doctor, User, Checkup, CheckupDoctor } = require('../models')
 const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
 
@@ -81,11 +81,16 @@ class Controller {
     try {
       let { userId } = req.session
       let { err } = req.query
-      // let data = await CheckUp.findAll({
-      //   include: CheckUpDoctor
-      // })
-      res.render('checkup', { err, userId })
+      let data = await CheckupDoctor.findAll({
+        include: [Checkup, Doctor],
+        required: false
+      })
+
+      // console.log(data, "<- dtat")
+      res.send(data)
+      res.render('checkup', { err, data, userId })
     } catch (error) {
+      // console.log(error, "<- error");
       res.send(error)
     }
   }
@@ -234,27 +239,25 @@ class Controller {
     }
   }
 
-  static async showAddCheckup(req, res) {
+  static async addCheckup(req, res) {
+    const { id } = req.params
+    const { userId } = req.session
+    const { appointment } = req.body
+
     try {
-      let { userId } = req.params
-      res.render('add-checkup', { userId })
+      const checkup = await Checkup.create({ UserId: userId, appointment: appointment })
+      await CheckupDoctor.create({ DoctorId: id, CheckUpId: checkup.id })
+
+      res.redirect("/")
     } catch (error) {
       res.send(error)
     }
   }
 
-  static async postAddCheckup(req, res) {
-    try {
-      let { userId } = req.session
-      let { appointment, doctorId } = req.body
-      console.log(req.body)
-
-      await Checkup.create({ UserId: userId, appointment })
-
-      res.redirect('/')
-    } catch (error) {
-      console.log(error)
-    }
+  static async showCreateAppointmentPage(req, res) {
+    const { id } = req.params
+    let { userId } = req.session
+    res.render('createappointment', { id, userId })
   }
 }
 

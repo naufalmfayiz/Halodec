@@ -12,24 +12,51 @@
     />
   </head>
   <body>
-    <%- include('_navbar') %>
+   <body>
+  <%- include('_navbar') %>
 
     <div class="container">
       <div style="text-align: center">
         <% if (err) { %>
-        <h2 style="color: red"><%= err %></h2>
-        <% } %>
-        <h2>Checkup List</h2>
-        <a href="checkup/<%= userId %>/add" class="btn btn-primary"
-          >Add Checkup</a
-        >
+          <h2 style="color: red">
+            <%= err %>
+          </h2>
+          <% } %>
+            <h2>Checkup List</h2>
       </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Doctor</th>
+            <th scope="col">Specialist</th>
+            <th scope="col">Appointment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (!data) { %>
+            <p>there is no checkup yet</p>
+          <% } else { %>
+            <% data.map(perData=>{ %>
+            <tr>
+              <td>
+                <%= perData.Doctor.name %>
+              </td>
+              <td>
+                <%= perData.Doctor.specialist %>
+              </td>
+              <td>
+                <%= perData.Checkup.appointment %>
+              </td>
+            </tr>
+            <% }) %>
+          <% } %>
+        </tbody>
+      </table>
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
-  </body>
+      crossorigin="anonymous"></script>
+</body>
 </html>

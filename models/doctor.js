@@ -12,7 +12,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Doctor.belongsToMany(models.Checkup, { through: "CheckupDoctors" })
+      Doctor.belongsToMany(models.Checkup, {
+        through: "CheckupDoctors",
+        foreignKey: "DoctorId",
+        otherKey: "CheckupId"
+      })
     }
 
     get idrCurrency() {
