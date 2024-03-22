@@ -255,9 +255,13 @@ class Controller {
   }
 
   static async showCreateAppointmentPage(req, res) {
-    const { id } = req.params
-    let { userId } = req.session
-    res.render('createappointment', { id, userId })
+    try {
+      const { id } = req.params
+      let { userId } = req.session
+      res.render('createappointment', { id, userId })
+    } catch (error) {
+      res.send(error)
+    }
   }
 }
 
